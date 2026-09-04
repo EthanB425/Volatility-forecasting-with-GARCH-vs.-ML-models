@@ -1,6 +1,6 @@
 # GARCH vs. ML Volatility Forecasting
 
-I built this to understand *why* volatility is hard to forecast, not just to see if a fancier model could beat a simpler one. The short version: a gradient-boosted tree does beat GARCH(1,1) here, but not for the reason you might expect, and it comes with its own real weakness that only shows up when you actually check for it.
+I built this to understand why volatility is hard to forecast, not just to see if a fancier model could beat a simpler one. The short version: a gradient-boosted tree does beat GARCH(1,1) here, but not for the reason you might expect, and it comes with its own real weakness that only shows up when you actually check for it.
 
 ## What I found
 
@@ -31,7 +31,7 @@ I picked four assets specifically because they behave differently, not similarly
 
 **GARCH baseline**: a GARCH(1,1) with a Student-t distribution, refit every 21 days on an expanding window. Refitting periodically instead of once was deliberate, since it's a form of walk-forward validation, and it's the same discipline the ML model needed.
 
-**ML model**: LightGBM, trained to predict three quantiles (10th, 50th, 90th) instead of a single number, so it produces an actual predictive range rather than a point guess. Features are lagged realized volatility, lagged squared returns, rolling volume, and the sign of recent returns (a rough proxy for the leverage effect). Critically, it's evaluated on the *exact same* dates as GARCH. I built a shared walk-forward split function specifically so the comparison couldn't be accidentally unfair.
+**ML model**: LightGBM, trained to predict three quantiles (10th, 50th, 90th) instead of a single number, so it produces an actual predictive range rather than a point guess. Features are lagged realized volatility, lagged squared returns, rolling volume, and the sign of recent returns (a rough proxy for the leverage effect). Critically, it's evaluated on the exact same dates as GARCH. I built a shared walk-forward split function specifically so the comparison couldn't be accidentally unfair.
 
 **Evaluation**: RMSE, QLIKE, and calibration, including a dedicated check on just the COVID crash window, since a model can look well-calibrated on average while badly failing exactly when it matters most.
 
